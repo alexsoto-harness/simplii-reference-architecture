@@ -1,0 +1,6 @@
+environment:
+  name: CIBC UAT
+  identifier: CIBC_UAT
+  orgIdentifier: sandbox
+  projectIdentifier: soto_sandbox
+  type: PreProduction

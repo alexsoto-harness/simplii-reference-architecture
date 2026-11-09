@@ -5,7 +5,7 @@ inputSet:
   orgIdentifier: sandbox
   projectIdentifier: soto_sandbox
   pipeline:
-    identifier: Consumer_Tech_Artifact_Signature
+    identifier: Simplii_Artifact_Signature
     variables:
       - name: image
         type: String

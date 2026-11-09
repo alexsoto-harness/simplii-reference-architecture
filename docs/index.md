@@ -1,4 +1,4 @@
-# Consumer Tech Sample
+# Simplii Sample
 
 A Spring Boot reference architecture demonstrating GitHub Actions and Harness CD best practices for Kubernetes, featuring comprehensive security scanning, blue/green and canary deployments, and ServiceNow change management integration.
 
@@ -51,11 +51,11 @@ java -jar target/spring-boot-sample-0.0.1-SNAPSHOT.jar
 ### Docker
 
 ```bash
-docker build -t consumer-tech-sample .
-docker run -p 8080:8080 consumer-tech-sample
+docker build -t simplii-sample .
+docker run -p 8080:8080 simplii-sample
 ```
 
 ## Links
 
-- [GitHub Repository](https://github.com/alexsoto-harness/consumer-tech-reference-architecture)
-- [Harness Pipeline](https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/soto_sandbox/pipelines/consumer_tech_ra/pipeline-studio/)
+- [GitHub Repository](https://github.com/alexsoto-harness/simplii-reference-architecture)
+- [Harness Pipeline](https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/soto_sandbox/pipelines/Simplii_AO_Deployment/pipeline-studio/)

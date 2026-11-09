@@ -1,4 +1,4 @@
-# Consumer Tech Spring Boot Sample
+# Simplii Spring Boot Sample
 
 A Spring Boot reference application demonstrating a complete CI/CD pipeline with GitHub Actions and Harness.
 
@@ -75,26 +75,33 @@ The `.harness/` folder contains Harness entity definitions:
 
 ### Pipelines
 
-- **`pipeline/consumer_tech_ra.yaml`** - Main CD pipeline (Consumer Tech Reference Architecture)
+- **`pipeline/Simplii_Lower_Env_Deployment.yaml`** - Lower-environment pipeline (runs on every push to `main`)
+  - Audit stage - Logs trigger payload and opens a Jira ticket
+  - Security scan ingestion via STO, SLSA verification, attestation report to Jira
+  - Rolling deployment + smoke test to CIBC DEV, then CIBC SIT
+
+- **`pipeline/Simplii_AO_Deployment.yaml`** - AO pipeline (run manually to promote a build)
   - Audit stage - Logs trigger payload
   - Security scan ingestion via STO
   - SLSA verification
-  - Deployment to UAT and PROD environments
+  - Blue/green deployment to CIBC UAT, ServiceNow approval, canary + rolling to CIBC Prod
 
-- **`pipeline/Consumer_Tech_Artifact_Signature.yaml`** - Artifact signing pipeline
+- **`pipeline/Simplii_Artifact_Signature.yaml`** - Artifact signing pipeline
   - SLSA provenance generation and attestation
   - Triggered via webhook from GitHub Actions
 
 ### Service
 
-- **`service/Consumer_Tech_Sample.yaml`** - Kubernetes service definition
+- **`service/Simplii_Sample.yaml`** - Kubernetes service definition
   - References k8s manifests from GitHub
   - DockerHub artifact source with pipeline variables
 
 ### Environments
 
-- **`environment/uat_wells_fargo/`** - Pre-production environment
-- **`environment/prod_wells_fargo/`** - Production environment
+- **`environment/cibc_dev/`** - Development environment
+- **`environment/cibc_sit/`** - System integration test environment
+- **`environment/cibc_uat/`** - Pre-production environment
+- **`environment/cibc_prod/`** - Production environment
 
 ### Input Sets
 
@@ -113,5 +120,5 @@ mvn clean install
 mvn spring-boot:run
 
 # Build Docker image
-docker build -t consumer-tech-spring-boot-sample .
+docker build -t simplii-spring-boot-sample .
 ```

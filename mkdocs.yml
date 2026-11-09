@@ -1,4 +1,4 @@
-site_name: Consumer Tech Sample
+site_name: Simplii Sample
 site_description: A Spring Boot reference architecture demonstrating GitHub Actions and Harness CD best practices for Kubernetes
 
 nav:

@@ -1,6 +1,6 @@
 environment:
-  name: UAT Wells Fargo
-  identifier: UAT_Wells_Fargo
+  name: CIBC SIT
+  identifier: CIBC_SIT
   orgIdentifier: sandbox
   projectIdentifier: soto_sandbox
   type: PreProduction

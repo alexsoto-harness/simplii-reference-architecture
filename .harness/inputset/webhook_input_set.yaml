@@ -5,7 +5,7 @@ inputSet:
   orgIdentifier: sandbox
   projectIdentifier: soto_sandbox
   pipeline:
-    identifier: consumer_tech_ra
+    identifier: Simplii_Lower_Env_Deployment
     variables:
       - name: repo_name
         type: String

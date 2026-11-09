@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevOps 2.0 | Consumer Tech Reference Architecture</title>
+    <title>DevOps 2.0 | Simplii Reference Architecture</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,12 +13,12 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        wf: {
-                            50: '#fdf2f2', 100: '#fbe2e3', 200: '#f6c3c5', 300: '#ee9296',
-                            400: '#e2545b', 500: '#d71e28', 600: '#b5161f', 700: '#93121a',
-                            800: '#7a1016', 900: '#5e0c11'
+                        sp: {
+                            50: '#fdf2f8', 100: '#fce7f3', 200: '#fbcfe8', 300: '#f9a8d4',
+                            400: '#f472b6', 500: '#d6006e', 600: '#b0005b', 700: '#8c0049',
+                            800: '#6e003a', 900: '#52002b'
                         },
-                        wfgold: { 300: '#ffdc7a', 400: '#ffcd41', 500: '#f2b800' }
+                        spaccent: { 300: '#ffd6ec', 400: '#ff9fd0', 500: '#ff6fb8' }
                     }
                 }
             }
@@ -27,22 +27,22 @@
     <style>
         .pipeline-node { transition: all 0.3s ease; cursor: pointer; }
         .pipeline-node:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .pipeline-node.active { border-color: #d71e28; background-color: #fdf2f2; box-shadow: 0 0 0 4px rgba(215,30,40,0.2); }
+        .pipeline-node.active { border-color: #d6006e; background-color: #fdf2f2; box-shadow: 0 0 0 4px rgba(215,30,40,0.2); }
         #detail-panel { transition: opacity 0.3s ease; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-800 font-sans antialiased selection:bg-wf-100 selection:text-wf-700">
+<body class="bg-gray-50 text-slate-800 font-sans antialiased selection:bg-sp-100 selection:text-sp-700">
 
     <!-- Tailwind safelist for dynamic JS classes -->
-    <div class="hidden bg-rose-50 border-rose-100 text-rose-800 text-rose-900 bg-rose-100 bg-wf-50 border-wf-100 text-wf-800 text-wf-900 text-green-500 bg-gray-100"></div>
+    <div class="hidden bg-rose-50 border-rose-100 text-rose-800 text-rose-900 bg-rose-100 bg-sp-50 border-sp-100 text-sp-800 text-sp-900 text-green-500 bg-gray-100"></div>
 
     <!-- Header -->
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <div class="bg-wf-500 text-white p-2.5 rounded-lg">
+                <div class="bg-sp-500 text-white p-2.5 rounded-lg">
                     <i class="fa-solid fa-layer-group text-xl"></i>
                 </div>
                 <div>
@@ -52,11 +52,11 @@
             </div>
             <div class="hidden md:flex items-center gap-3">
                 <a href="https://excalidraw.com/#room=86a865a29470266c57aa,Vr9ihPujBEMa4niv7alXuw" target="_blank"
-                   class="text-sm text-wf-600 hover:text-wf-700 font-medium flex items-center gap-1.5">
+                   class="text-sm text-sp-600 hover:text-sp-700 font-medium flex items-center gap-1.5">
                     <i class="fa-solid fa-diagram-project"></i> Architecture Diagram
                 </a>
                 <span class="text-gray-300">|</span>
-                <span class="text-xs text-gray-400">Deployed with <strong class="text-wf-600">Harness.io</strong></span>
+                <span class="text-xs text-gray-400">Deployed with <strong class="text-sp-600">Harness.io</strong></span>
             </div>
         </div>
     </header>
@@ -68,7 +68,7 @@
             <h2 class="text-3xl font-bold text-slate-900 mb-4">End-to-End Delivery Pipeline</h2>
             <p class="text-gray-600 leading-relaxed">
                 This reference architecture demonstrates a complete software delivery pipeline for
-                <strong class="text-wf-600">Consumer Tech</strong>, integrating
+                <strong class="text-sp-600">Simplii Financial</strong>, a division of CIBC,, integrating
                 <strong>GitHub Actions</strong> for CI with <strong>Harness</strong> for continuous delivery,
                 security orchestration, and governance; from commit to production on Kubernetes.
             </p>
@@ -95,8 +95,8 @@
                 </div>
 
                 <!-- Arrow: Webhook Handoff -->
-                <div class="hidden md:flex flex-col justify-center items-center text-wf-500 relative px-2">
-                    <div class="absolute -top-6 w-max text-xs font-bold tracking-wider uppercase text-wfgold-500">Webhook</div>
+                <div class="hidden md:flex flex-col justify-center items-center text-sp-500 relative px-2">
+                    <div class="absolute -top-6 w-max text-xs font-bold tracking-wider uppercase text-spaccent-500">Webhook</div>
                     <i class="fa-solid fa-angles-right text-3xl animate-pulse"></i>
                 </div>
 
@@ -123,10 +123,10 @@
 
                 <!-- Stage 3: Deploy -->
                 <div onclick="selectStage('deploy')" id="node-deploy"
-                     class="pipeline-node flex-1 bg-white border-2 border-wf-200 rounded-xl p-6 min-w-[200px] flex flex-col gap-3 group hover:border-wf-500">
+                     class="pipeline-node flex-1 bg-white border-2 border-sp-200 rounded-xl p-6 min-w-[200px] flex flex-col gap-3 group hover:border-sp-500">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="bg-wf-100 text-wf-700 text-xs font-bold px-2 py-1 rounded">CD (HARNESS)</span>
-                        <i class="fa-solid fa-rocket text-2xl text-wf-400 group-hover:text-wf-600 transition-colors"></i>
+                        <span class="bg-sp-100 text-sp-700 text-xs font-bold px-2 py-1 rounded">CD (HARNESS)</span>
+                        <i class="fa-solid fa-rocket text-2xl text-sp-400 group-hover:text-sp-600 transition-colors"></i>
                     </div>
                     <h4 class="font-bold text-slate-800">Deploy &amp; Verify</h4>
                     <ul class="text-sm text-gray-500 space-y-1">
@@ -184,7 +184,7 @@ curl -X POST \
   --url "${HARNESS_WEBHOOK_URL}" \
   -d '{
     "image_full": "index.docker.io/...:abc1234",
-    "image_name": "consumer-tech-spring-boot-sample",
+    "image_name": "simplii-spring-boot-sample",
     "image_tag": "abc1234",
     "sha": "...", "branch": "main",
     "commit_message": "...",
@@ -258,7 +258,7 @@ curl -X POST \
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                 <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
-                    <div class="bg-wf-50 text-wf-600 w-10 h-10 rounded-lg flex items-center justify-center mb-3">
+                    <div class="bg-sp-50 text-sp-600 w-10 h-10 rounded-lg flex items-center justify-center mb-3">
                         <i class="fa-solid fa-link"></i>
                     </div>
                     <h4 class="font-bold text-slate-800 mb-1">Supply Chain Security</h4>
@@ -332,11 +332,11 @@ curl -X POST \
         </section>
 
         <!-- Excalidraw Callout -->
-        <section class="bg-gradient-to-r from-wf-500 to-wf-600 rounded-2xl p-8 text-white text-center">
+        <section class="bg-gradient-to-r from-sp-500 to-sp-600 rounded-2xl p-8 text-white text-center">
             <h3 class="text-xl font-bold mb-2">Explore the Full Architecture Diagram</h3>
-            <p class="text-wfgold-300 mb-4">Interactive diagram showing the complete CI/CD flow from commit to production on Kubernetes.</p>
+            <p class="text-spaccent-300 mb-4">Interactive diagram showing the complete CI/CD flow from commit to production on Kubernetes.</p>
             <a href="https://excalidraw.com/#room=86a865a29470266c57aa,Vr9ihPujBEMa4niv7alXuw" target="_blank"
-               class="inline-flex items-center gap-2 bg-white text-wf-600 font-bold px-6 py-3 rounded-lg hover:bg-wf-50 transition-colors">
+               class="inline-flex items-center gap-2 bg-white text-sp-600 font-bold px-6 py-3 rounded-lg hover:bg-sp-50 transition-colors">
                 <i class="fa-solid fa-diagram-project"></i> Open in Excalidraw
             </a>
         </section>
@@ -352,8 +352,8 @@ curl -X POST \
                     <p class="text-xs mt-1">This is a reference implementation demonstrating Harness platform capabilities. Scanner and tool choices are illustrative &mdash; Harness is tool-agnostic.</p>
                 </div>
                 <div class="text-right text-xs">
-                    <p>Built and deployed with <strong class="text-wfgold-400">Harness.io</strong></p>
-                    <p class="text-gray-500 mt-1">&copy; 2026 Consumer Tech &bull; Harness Reference Architecture</p>
+                    <p>Built and deployed with <strong class="text-spaccent-400">Harness.io</strong></p>
+                    <p class="text-gray-500 mt-1">&copy; 2026 Simplii Financial &bull; Harness Reference Architecture</p>
                 </div>
             </div>
         </div>
@@ -460,15 +460,15 @@ curl -X POST \
                             If deviation exceeds the threshold, <strong>automatic rollback</strong> triggers immediately.
                         </p>
                     </div>
-                    <div class="bg-wf-50 p-4 rounded-lg border border-wf-100">
-                        <h4 class="font-bold text-wf-800 mb-2 text-xs uppercase tracking-wide">Deployment Model Flexibility</h4>
-                        <p class="text-sm text-wf-900 mb-3">
+                    <div class="bg-sp-50 p-4 rounded-lg border border-sp-100">
+                        <h4 class="font-bold text-sp-800 mb-2 text-xs uppercase tracking-wide">Deployment Model Flexibility</h4>
+                        <p class="text-sm text-sp-900 mb-3">
                             This pipeline demonstrates traditional Harness CD deployment to Kubernetes. Harness also
                             natively supports <strong>GitOps with ArgoCD</strong> &mdash; whether your team uses
                             push-based pipelines or pull-based GitOps, the platform accommodates both models
                             with the same governance, verification, and rollback capabilities.
                         </p>
-                        <p class="text-sm text-wf-900">
+                        <p class="text-sm text-sp-900">
                             Deployment strategies include <strong>Canary</strong>, <strong>Blue/Green</strong>,
                             <strong>Rolling</strong>, and custom workflows &mdash; each with built-in verification
                             and automated rollback.
@@ -524,7 +524,7 @@ curl -X POST \
     const colorMap = {
         blue:      { border: '#3b82f6', bg: '#eff6ff' },
         rose:      { border: '#f43f5e', bg: '#fff1f2' },
-        wf: { border: '#d71e28', bg: '#fdf2f2' },
+        wf: { border: '#d6006e', bg: '#fdf2f8' },
         purple:    { border: '#a855f7', bg: '#faf5ff' }
     };
 

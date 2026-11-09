@@ -1,13 +1,13 @@
 infrastructureDefinition:
-  name: PROD Consumer Tech
-  identifier: PROD_Consumer_Tech
+  name: Simplii Prod
+  identifier: Simplii_Prod
   orgIdentifier: sandbox
   projectIdentifier: soto_sandbox
-  environmentRef: PROD_Wells_Fargo
+  environmentRef: CIBC_Prod
   deploymentType: Kubernetes
   type: KubernetesDirect
   spec:
     connectorRef: org.se_sandbox_k8s
-    namespace: consumer-tech-prod
+    namespace: simplii-prod
     releaseName: release-<+INFRA_KEY_SHORT_ID>
   allowSimultaneousDeployments: false

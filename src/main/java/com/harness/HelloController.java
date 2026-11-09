@@ -13,6 +13,6 @@ public class HelloController {
 
     @GetMapping("/api/info")
     public String info() {
-        return "{\"app\": \"Consumer Tech Spring Boot Sample\", \"status\": \"running\"}";
+        return "{\"app\": \"Simplii Spring Boot Sample\", \"status\": \"running\"}";
     }
 }

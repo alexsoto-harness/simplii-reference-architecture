@@ -1,6 +1,6 @@
 pipeline:
-  name: Consumer Tech Reference Architecture
-  identifier: consumer_tech_ra
+  name: Simplii Lower Env Deployment
+  identifier: Simplii_Lower_Env_Deployment
   projectIdentifier: soto_sandbox
   orgIdentifier: sandbox
   tags: {}
@@ -540,351 +540,49 @@ pipeline:
                   timeout: 10m
         tags: {}
     - stage:
-        name: Deploy to UAT
-        identifier: Deploy_to_UAT
-        description: ""
+        name: Deploy to DEV
+        identifier: Deploy_to_DEV
+        description: Rolling deployment to CIBC DEV with smoke test
         type: Deployment
         spec:
           deploymentType: Kubernetes
           service:
-            serviceRef: Consumer_Tech_Sample
+            serviceRef: Simplii_Sample
           environment:
-            environmentRef: UAT_Wells_Fargo
+            environmentRef: CIBC_DEV
             deployToAll: false
             infrastructureDefinitions:
-              - identifier: UAT_Consumer_Tech
+              - identifier: Simplii_DEV
           execution:
             steps:
-              - stepGroup:
-                  name: Blue Green Deployment
-                  identifier: Blue_Green_Deployment
-                  steps:
-                    - step:
-                        name: Stage Deployment
-                        identifier: stageDeployment
-                        type: K8sBlueGreenDeploy
-                        timeout: 10m
-                        spec:
-                          skipDryRun: false
-                          pruningEnabled: false
-                    - stepGroup:
-                        name: QA Testing
-                        identifier: QA_Testing
-                        steps:
-                          - parallel:
-                              - step:
-                                  type: Http
-                                  name: Selenium Regression Testin
-                                  identifier: Selenium_Regression_Testin
-                                  spec:
-                                    url: https://harness.free.beeceptor.com/selenium-test-report
-                                    method: GET
-                                    headers: []
-                                    inputVariables: []
-                                    outputVariables: []
-                                  timeout: 10s
-                              - step:
-                                  type: Http
-                                  name: Playwright Functional Testing
-                                  identifier: Playwright_Functional_Testing
-                                  spec:
-                                    url: https://harness.free.beeceptor.com/playwright-report
-                                    method: GET
-                                    headers: []
-                                    inputVariables: []
-                                    outputVariables: []
-                                  timeout: 10s
-                      contextType: Pipeline
-                    - step:
-                        type: ShellScript
-                        name: Parse Test Results
-                        identifier: Parse_Test_Results
-                        spec:
-                          shell: Bash
-                          executionTarget: {}
-                          source:
-                            type: Inline
-                            spec:
-                              script: |-
-                                #!/bin/bash
-                                 
-                                # Build the QA test results report in JIRA wiki markup
-                                TEST_RESULTS=$(cat <<'EOF'
-                                h1. 🧪 QA Test Results Report
-                                 
-                                h2. 🔬 Selenium Regression Testing
-                                *Status:* <+pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.status>
-                                 
-                                h3. Test Summary
-                                ||Metric||Value||
-                                |Test Suite|<+json.select("testSuite", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Test Class|<+json.select("testClass", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Total Tests|<+json.select("testSummaryReport.totalTests", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Passed|<+json.select("testSummaryReport.passed", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Failed|<+json.select("testSummaryReport.failed", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Skipped|<+json.select("testSummaryReport.skipped", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Duration (sec)|<+json.select("testSummaryReport.totalDurationSeconds", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Success Rate|<+json.select("testSummaryReport.successRatePercent", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>%|
-                                 
-                                h3. Test Environment
-                                ||Component||Version||
-                                |WebDriver|<+json.select("testEnvironmentDetails.webDriver", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Operating System|<+json.select("testEnvironmentDetails.operatingSystem", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Test Framework|<+json.select("testEnvironmentDetails.testFramework", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Language|<+json.select("testEnvironmentDetails.programmingLanguage", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Build Tool|<+json.select("testEnvironmentDetails.buildTool", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Test Runner|<+json.select("testEnvironmentDetails.testRunner", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                |Reporting|<+json.select("testEnvironmentDetails.reporting", pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Selenium_Regression_Testin.output.httpResponseBody)>|
-                                 
-                                ----
-                                 
-                                h2. 🎭 Playwright Functional Testing
-                                *Status:* <+pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Playwright_Functional_Testing.output.status>
-                                 
-                                h3. Test Output
-                                {code}
-                                <+pipeline.stages.Deploy_to_UAT.spec.execution.steps.Blue_Green_Deployment.steps.QA_Testing.steps.Playwright_Functional_Testing.output.httpResponseBody>
-                                {code}
-                                 
-                                ----
-                                {panel:title=End of QA Test Results|borderColor=#ccc|bgColor=#f5f5f5}
-                                Generated by Harness Pipeline
-                                {panel}
-                                EOF
-                                )
-                                 
-                                echo "$TEST_RESULTS"
-                                 
-                                # Export to output variable
-                                export QA_TEST_RESULTS="$TEST_RESULTS"
-                          environmentVariables: []
-                          outputVariables:
-                            - name: QA_TEST_RESULTS
-                              type: String
-                              value: QA_TEST_RESULTS
-                        timeout: 10m
-                    - step:
-                        name: Swap primary with stage service
-                        identifier: bgSwapServices
-                        type: K8sBGSwapServices
-                        timeout: 10m
-                        spec:
-                          skipDryRun: false
-                      contextType: Pipeline
               - step:
-                  type: JiraUpdate
-                  name: Jira Upload Test Results
-                  identifier: Jira_Upload_Test_Results
+                  type: ShellScript
+                  name: Ensure Namespace
+                  identifier: Ensure_Namespace
                   spec:
-                    connectorRef: account.Harness_JIRA
-                    issueKey: <+pipeline.stages.audit.spec.execution.steps.Create_Jira_Ticket.issue.key>
-                    transitionTo:
-                      transitionName: ""
-                      status: QA Test
-                    fields:
-                      - name: Comment
-                        value: <+execution.steps.Parse_Test_Results.output.outputVariables.QA_TEST_RESULTS>
-                    issueType: Task
-                    projectKey: HD
-                  timeout: 10m
-            rollbackSteps:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: kubectl create namespace <+infra.namespace> --dry-run=client -o yaml | kubectl apply -f -
+                    environmentVariables: []
+                    outputVariables: []
+                    delegateSelectors:
+                      - se-sandbox-org-delegate
+                  timeout: 5m
               - step:
-                  name: Swap primary with stage service
-                  identifier: rollbackBgSwapServices
-                  type: K8sBGSwapServices
+                  name: Rolling Deployment
+                  identifier: rollingDeployment
+                  type: K8sRollingDeploy
                   timeout: 10m
                   spec:
                     skipDryRun: false
-        tags: {}
-        failureStrategies:
-          - onFailure:
-              errors:
-                - AllErrors
-              action:
-                type: StageRollback
-    - stage:
-        name: ServiceNow Approval
-        identifier: ServiceNow_Approval
-        description: ""
-        type: Approval
-        spec:
-          execution:
-            steps:
-              - step:
-                  name: Create Change Request
-                  identifier: Create_Change_Request
-                  type: ServiceNowCreate
-                  timeout: 5m
-                  spec:
-                    connectorRef: account.ServiceNow_Dev
-                    ticketType: change_request
-                    fields:
-                      - name: description
-                        value: |-
-                          Change Summary: Request for promotion of <+pipeline.stages.Deploy_to_UAT.spec.service.name> to Production 
-                          Artifact: <+pipeline.variables.image_name>:<+pipeline.variables.image_tag> 
-                      - name: short_description
-                        value: |
-                          Request promotion from UAT to Production for <+pipeline.stages.Deploy_to_UAT.spec.service.name>
-                      - name: state
-                        value: "-2"
-                      - name: requested_by
-                        value: 623b03a63ba97650b1e96b8ea3e45a93
-                      - name: assignment_group
-                        value: d305616d933ada100f38fb4e1dba105b
-                    createType: Normal
-              - step:
-                  name: Approve CR
-                  identifier: Approve_CR
-                  type: ServiceNowApproval
-                  timeout: 1d
-                  spec:
-                    approvalCriteria:
-                      type: KeyValues
-                      spec:
-                        matchAnyCondition: true
-                        conditions:
-                          - key: state
-                            operator: equals
-                            value: Implement
-                    rejectionCriteria:
-                      type: KeyValues
-                      spec:
-                        matchAnyCondition: true
-                        conditions: []
-                    connectorRef: account.ServiceNow_Dev
-                    ticketNumber: <+execution.steps.Create_Change_Request.ticket.ticketNumber>
-                    retryInterval: 10s
-                    ticketType: change_request
-        tags: {}
-    - stage:
-        name: Deploy to Prod
-        identifier: Deploy_to_Prod
-        description: ""
-        type: Deployment
-        spec:
-          deploymentType: Kubernetes
-          service:
-            serviceRef: Consumer_Tech_Sample
-          environment:
-            environmentRef: PROD_Wells_Fargo
-            deployToAll: false
-            infrastructureDefinitions:
-              - identifier: PROD_Consumer_Tech
-          execution:
-            steps:
-              - stepGroup:
-                  name: Canary Deployment
-                  identifier: canaryDeployment
-                  steps:
-                    - step:
-                        name: Canary Deployment
-                        identifier: canaryDeployment
-                        type: K8sCanaryDeploy
-                        timeout: 10m
-                        spec:
-                          instanceSelection:
-                            type: Count
-                            spec:
-                              count: 1
-                          skipDryRun: false
-                    - parallel:
-                        - step:
-                            type: Http
-                            name: Release Verification
-                            identifier: Release_Verification
-                            spec:
-                              url: https://harness.free.beeceptor.com/resiliency-score
-                              method: GET
-                              headers: []
-                              inputVariables: []
-                              outputVariables: []
-                            timeout: 10s
-                        - step:
-                            type: ServiceNowUpdate
-                            name: Update CR State
-                            identifier: Update_CR_State
-                            spec:
-                              useServiceNowTemplate: false
-                              connectorRef: account.ServiceNow_Dev
-                              ticketType: change_request
-                              ticketNumber: <+pipeline.stages.ServiceNow_Approval.spec.execution.steps.Create_Change_Request.ticket.ticketNumber>
-                              fields:
-                                - name: state
-                                  value: "0"
-                                - name: comments_and_work_notes
-                                  value: Canary in Progress
-                            timeout: 10m
-                    - step:
-                        name: Canary Delete
-                        identifier: canaryDelete
-                        type: K8sCanaryDelete
-                        timeout: 10m
-                        spec: {}
-              - stepGroup:
-                  name: Primary Deployment
-                  identifier: primaryDeployment
-                  steps:
-                    - step:
-                        name: Rolling Deployment
-                        identifier: rollingDeployment
-                        type: K8sRollingDeploy
-                        timeout: 10m
-                        spec:
-                          skipDryRun: false
-                    - step:
-                        type: ShellScript
-                        name: Retrieve Service Endpoint
-                        identifier: Retrieve_Service_Endpoint
-                        spec:
-                          shell: Bash
-                          executionTarget: {}
-                          source:
-                            type: Inline
-                            spec:
-                              script: |-
-                                echo "CR number: <+pipeline.stages.ServiceNow_Approval.spec.execution.steps.Approve_CR.output.ticketNumber>"
-                                SERVICE_NAME="<+pipeline.stages.Deploy_to_Prod.spec.execution.steps.primaryDeployment.steps.rollingDeployment.deploymentInfoOutcome.serverInstanceInfoList[0].containerList[0].name>-service"
-                                NAMESPACE="<+infra.namespace>"
-                                TIMEOUT=300
-
-                                echo "Waiting for LoadBalancer IP for: ${SERVICE_NAME} in namespace: ${NAMESPACE}"
-                                  
-                                START_TIME=$(date +%s)
-                                EXTERNAL_IP=""
-                                 
-                                while [ -z "${EXTERNAL_IP}" ] || [ "${EXTERNAL_IP}" = "<none>" ] || [ "${EXTERNAL_IP}" = "<pending>" ]; do
-                                  EXTERNAL_IP=$(kubectl get svc "${SERVICE_NAME}" -n "${NAMESPACE}" -o wide 2>/dev/null | awk 'NR==2 {print $4}')
-                                  
-                                  ELAPSED=$(($(date +%s) - START_TIME))
-                                  if [ ${ELAPSED} -ge ${TIMEOUT} ]; then
-                                    echo "Timeout after ${TIMEOUT}s"
-                                    exit 1
-                                  fi
-                                  
-                                  if [ -z "${EXTERNAL_IP}" ] || [ "${EXTERNAL_IP}" = "<none>" ] || [ "${EXTERNAL_IP}" = "<pending>" ]; then
-                                    echo "Waiting... (${ELAPSED}s)"
-                                    sleep 10
-                                  fi
-                                done
-                                 
-                                ENDPOINT="http://${EXTERNAL_IP}"
-                                echo "Endpoint: ${ENDPOINT}"
-                                 
-                                export ENDPOINT
-                                export EXTERNAL_IP
-                          environmentVariables: []
-                          outputVariables:
-                            - name: EXTERNAL_IP
-                              type: String
-                              value: EXTERNAL_IP
-                        timeout: 10m
-                  delegateSelectors:
-                    - se-sandbox-org-delegate
+                    pruningEnabled: false
               - step:
                   type: ShellScript
-                  name: Parse Verification Results
-                  identifier: Parse_Verification_Results
+                  name: Smoke Test
+                  identifier: Smoke_Test
                   spec:
                     shell: Bash
                     executionTarget: {}
@@ -893,197 +591,255 @@ pipeline:
                       spec:
                         script: |-
                           #!/bin/bash
+                          SERVICE_NAME="$(echo "<+service.name>" | tr ' _' '--' | tr '[:upper:]' '[:lower:]')-service"
+                          NAMESPACE="<+infra.namespace>"
+                          TIMEOUT=300
 
-                          EXTERNAL_IP="<+pipeline.stages.Deploy_to_Prod.spec.execution.steps.primaryDeployment.steps.Retrieve_Service_Endpoint.output.outputVariables.EXTERNAL_IP>"
-                          STATUS="<+pipeline.stages.Deploy_to_Prod.spec.execution.steps.canaryDeployment.steps.Release_Verification.output.status>"
-                          RESPONSE_BODY='<+pipeline.stages.Deploy_to_Prod.spec.execution.steps.canaryDeployment.steps.Release_Verification.output.httpResponseBody>'
+                          echo "Waiting for LoadBalancer IP for: ${SERVICE_NAME} in namespace: ${NAMESPACE}"
+                          START_TIME=$(date +%s)
+                          EXTERNAL_IP=""
+                          while [ -z "${EXTERNAL_IP}" ] || [ "${EXTERNAL_IP}" = "<none>" ] || [ "${EXTERNAL_IP}" = "<pending>" ]; do
+                            EXTERNAL_IP=$(kubectl get svc "${SERVICE_NAME}" -n "${NAMESPACE}" -o wide 2>/dev/null | awk 'NR==2 {print $4}')
+                            ELAPSED=$(($(date +%s) - START_TIME))
+                            if [ ${ELAPSED} -ge ${TIMEOUT} ]; then
+                              echo "Timeout after ${TIMEOUT}s"
+                              exit 1
+                            fi
+                            if [ -z "${EXTERNAL_IP}" ] || [ "${EXTERNAL_IP}" = "<none>" ] || [ "${EXTERNAL_IP}" = "<pending>" ]; then
+                              echo "Waiting... (${ELAPSED}s)"
+                              sleep 10
+                            fi
+                          done
+                          ENDPOINT="http://${EXTERNAL_IP}"
+                          echo "Endpoint: ${ENDPOINT}"
 
-                          # Parse JSON fields using jq
-                          RESILIENCY_SCORE=$(echo "$RESPONSE_BODY" | jq -r '.resiliencyScore // "N/A"')
-                          FAULTS_PASSED=$(echo "$RESPONSE_BODY" | jq -r '.faultsPassed // "N/A"')
-                          FAULTS_FAILED=$(echo "$RESPONSE_BODY" | jq -r '.faultsFailed // "N/A"')
-                          AVG_RESPONSE_TIME=$(echo "$RESPONSE_BODY" | jq -r '.averageResponseTimeMs // "N/A"')
-                          ERRORS_PER_MIN=$(echo "$RESPONSE_BODY" | jq -r '.errorsPerMinute // "N/A"')
-                          THROUGHPUT=$(echo "$RESPONSE_BODY" | jq -r '.throughputCallsPerMinute // "N/A"')
-                          DESCRIPTION=$(echo "$RESPONSE_BODY" | jq -r '.description // "N/A"')
+                          # Smoke test: the home page and the API must both return 200
+                          for path in / /api/info; do
+                            CODE=""
+                            for i in $(seq 1 18); do
+                              CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "${ENDPOINT}${path}")
+                              [ "${CODE}" = "200" ] && break
+                              echo "GET ${path} -> ${CODE}, retrying..."
+                              sleep 10
+                            done
+                            echo "GET ${path} -> ${CODE}"
+                            if [ "${CODE}" != "200" ]; then
+                              echo "Smoke test failed for ${path}"
+                              exit 1
+                            fi
+                          done
+                          API_RESPONSE=$(curl -s --max-time 5 "${ENDPOINT}/api/info")
+                          echo "API response: ${API_RESPONSE}"
 
-                          # Build the release verification report in JIRA wiki markup
-                          RELEASE_VERIFICATION=$(cat <<EOF
-                          h2. 🌐 Production Endpoint
-                          *Application URL:* [http://${EXTERNAL_IP}/|http://${EXTERNAL_IP}/]
+                          SMOKE_TEST_RESULTS=$(cat <<EOF
+                          h1. 💨 <+env.name> Smoke Test Report
+                          *Application URL:* [${ENDPOINT}/|${ENDPOINT}/]
+                          *Artifact:* <+artifact.image>
 
-                          ----
+                          ||Check||Result||
+                          |GET /|200 OK|
+                          |GET /api/info|200 OK|
 
-                          h1. 🚦 Release Verification Report
-                           
-                          *Status:* ${STATUS}
-                           
-                          h2. 📊 Resiliency Summary
-                          ||Metric||Value||
-                          |Resiliency Score|${RESILIENCY_SCORE}|
-                          |Faults Passed|${FAULTS_PASSED}|
-                          |Faults Failed|${FAULTS_FAILED}|
-                           
-                          h2. ⚡ Performance Metrics
-                          ||Metric||Value||
-                          |Avg Response Time|${AVG_RESPONSE_TIME} ms|
-                          |Errors Per Minute|${ERRORS_PER_MIN}|
-                          |Throughput|${THROUGHPUT} calls/min|
-                           
-                          h2. 📝 Description
-                          {quote}
-                          ${DESCRIPTION}
-                          {quote}
-                           
+                          h3. API Response
+                          {code}
+                          ${API_RESPONSE}
+                          {code}
                           ----
                           _Generated by Harness Pipeline_
                           EOF
                           )
+                          echo "$SMOKE_TEST_RESULTS"
 
-                          echo "$RELEASE_VERIFICATION"
-
-                          # Export to output variable
-                          export RELEASE_VERIFICATION_RESULTS="$RELEASE_VERIFICATION"
+                          export EXTERNAL_IP
+                          export SMOKE_TEST_RESULTS
                     environmentVariables: []
                     outputVariables:
-                      - name: RELEASE_VERIFICATION_RESULTS
+                      - name: EXTERNAL_IP
                         type: String
-                        value: RELEASE_VERIFICATION_RESULTS
+                        value: EXTERNAL_IP
+                      - name: SMOKE_TEST_RESULTS
+                        type: String
+                        value: SMOKE_TEST_RESULTS
                     delegateSelectors:
                       - se-sandbox-org-delegate
                   timeout: 10m
-              - parallel:
-                  - step:
-                      type: ServiceNowUpdate
-                      name: Close CR
-                      identifier: Close_CR
-                      spec:
-                        useServiceNowTemplate: false
-                        connectorRef: account.ServiceNow_Dev
-                        ticketType: change_request
-                        ticketNumber: <+pipeline.stages.ServiceNow_Approval.spec.execution.steps.Create_Change_Request.ticket.ticketNumber>
-                        fields:
-                          - name: description
-                            value: |-
-                              CHANGE MANAGEMENT NOTIFICATION
-                              Service Deployment Update
-                              Service: <+service.name>
-                              Status: Successfully promoted to production environment
-
-                              Deployment Details
-                              Change Summary: Promotion of <+service.name> to production environment
-                              Pipeline Name: <+pipeline.name>
-                              Artifact Version: <+artifact.image>
-                              Deployment URL: <+pipeline.executionUrl>
-                              Execution ID: <+pipeline.executionId>
-                              Change Requested By: <+pipeline.triggeredBy.name>
-                              Request Email: <+pipeline.triggeredBy.email>
-
-                              Environment Information
-                              Target Environment: Production
-                              Previous Deployment: <+env.lastSuccessfulDeploymentId>
-
-                              This is an automated notification from Harness CD Platform.
-                          - name: short_description
-                            value: <+service.name> - Production Deployment Update [<+pipeline.executionId>]
-                          - name: close_code
-                            value: successful
-                          - name: close_notes
-                            value: Successfully promoted <+service.name> to production
-                          - name: work_notes
-                            value: |-
-                              <+env.name> gates passed.
-                              Successfully deployed <+artifacts.primary.imagePath>:<+artifacts.primary.tag> for the <+service.name> service to <+env.name>
-                              Pipeline Execution: <+pipeline.executionUrl>
-                      timeout: 10m
-                  - step:
-                      type: JiraUpdate
-                      name: Post Deploy Jira Update
-                      identifier: Update_Jira
-                      spec:
-                        connectorRef: account.Harness_JIRA
-                        issueKey: <+pipeline.stages.audit.spec.execution.steps.Create_Jira_Ticket.issue.key>
-                        transitionTo:
-                          transitionName: ""
-                          status: Done
-                        fields:
-                          - name: Comment
-                            value: <+pipeline.stages.Deploy_to_Prod.spec.execution.steps.Parse_Verification_Results.output.outputVariables.RELEASE_VERIFICATION_RESULTS>
-                        issueType: Task
-                        projectKey: HD
-                      timeout: 10m
-            rollbackSteps:
               - step:
-                  type: ServiceNowUpdate
-                  name: Update CR State
-                  identifier: Update_CR_State
+                  type: JiraUpdate
+                  name: Jira Upload DEV Smoke Test
+                  identifier: Jira_Upload_Smoke_Test
                   spec:
-                    useServiceNowTemplate: false
-                    connectorRef: account.ServiceNow_Dev
-                    ticketType: change_request
-                    ticketNumber: <+pipeline.stages.ServiceNow_Approval.spec.execution.steps.Create_Change_Request.ticket.ticketNumber>
+                    connectorRef: account.Harness_JIRA
+                    issueKey: <+pipeline.stages.audit.spec.execution.steps.Create_Jira_Ticket.issue.key>
+                    transitionTo:
+                      transitionName: ""
+                      status: QA Test
                     fields:
-                      - name: comments_and_work_notes
-                        value: Beginning Rollback
-                      - name: state
-                        value: "0"
+                      - name: Comment
+                        value: <+execution.steps.Smoke_Test.output.outputVariables.SMOKE_TEST_RESULTS>
+                    issueType: Task
+                    projectKey: HD
                   timeout: 10m
-              - step:
-                  name: Canary Delete
-                  identifier: rollbackCanaryDelete
-                  type: K8sCanaryDelete
-                  timeout: 10m
-                  spec: {}
+            rollbackSteps:
               - step:
                   name: Rolling Rollback
                   identifier: rollingRollback
                   type: K8sRollingRollback
                   timeout: 10m
                   spec: {}
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
+    - stage:
+        name: Deploy to SIT
+        identifier: Deploy_to_SIT
+        description: Rolling deployment to CIBC SIT with smoke test
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: Simplii_Sample
+          environment:
+            environmentRef: CIBC_SIT
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: Simplii_SIT
+          execution:
+            steps:
               - step:
-                  type: ServiceNowUpdate
-                  name: Close CR with Failure
-                  identifier: Close_CR_with_Failure
+                  type: ShellScript
+                  name: Ensure Namespace
+                  identifier: Ensure_Namespace
                   spec:
-                    useServiceNowTemplate: false
-                    connectorRef: account.ServiceNow_Dev
-                    ticketType: change_request
-                    ticketNumber: <+pipeline.stages.ServiceNow_Approval.spec.execution.steps.Create_Change_Request.ticket.ticketNumber>
-                    fields:
-                      - name: description
-                        value: |-
-                          CHANGE MANAGEMENT NOTIFICATION
-                          Service Deployment Update
-                          Service: <+service.name>
-                          Status: Rolled back to previous stable version due to failure
-
-                          Deployment Details
-                          Change Summary: Promotion of <+service.name> to production environment
-                          Pipeline Name: <+pipeline.name>
-                          Artifact Version: <+artifact.image>
-                          Deployment URL: <+pipeline.executionUrl>
-                          Execution ID: <+pipeline.executionId>
-                          Change Requested By: <+pipeline.triggeredBy.name>
-                          Request Email: <+pipeline.triggeredBy.email>
-
-                          Environment Information
-                          Target Environment: Production
-                          Previous Deployment: <+env.lastSuccessfulDeploymentId>
-
-
-                          This is an automated notification from Harness CD Platform.
-                      - name: short_description
-                        value: <+service.name> - Production Deployment Update [<+pipeline.executionId>]
-                      - name: close_code
-                        value: unsuccessful
-                      - name: close_notes
-                        value: <+service.name> promotion to production failed and was automatically rolled back.
-                      - name: work_notes
-                        value: |-
-                          <+env.name> gates failed.
-                          Successfully rolled back <+artifacts.primary.imagePath>:<+artifacts.primary.tag> for the <+service.name> service to <+env.name>
-                          Pipeline Execution: <+pipeline.executionUrl>
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: kubectl create namespace <+infra.namespace> --dry-run=client -o yaml | kubectl apply -f -
+                    environmentVariables: []
+                    outputVariables: []
+                    delegateSelectors:
+                      - se-sandbox-org-delegate
+                  timeout: 5m
+              - step:
+                  name: Rolling Deployment
+                  identifier: rollingDeployment
+                  type: K8sRollingDeploy
                   timeout: 10m
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+              - step:
+                  type: ShellScript
+                  name: Smoke Test
+                  identifier: Smoke_Test
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: |-
+                          #!/bin/bash
+                          SERVICE_NAME="$(echo "<+service.name>" | tr ' _' '--' | tr '[:upper:]' '[:lower:]')-service"
+                          NAMESPACE="<+infra.namespace>"
+                          TIMEOUT=300
+
+                          echo "Waiting for LoadBalancer IP for: ${SERVICE_NAME} in namespace: ${NAMESPACE}"
+                          START_TIME=$(date +%s)
+                          EXTERNAL_IP=""
+                          while [ -z "${EXTERNAL_IP}" ] || [ "${EXTERNAL_IP}" = "<none>" ] || [ "${EXTERNAL_IP}" = "<pending>" ]; do
+                            EXTERNAL_IP=$(kubectl get svc "${SERVICE_NAME}" -n "${NAMESPACE}" -o wide 2>/dev/null | awk 'NR==2 {print $4}')
+                            ELAPSED=$(($(date +%s) - START_TIME))
+                            if [ ${ELAPSED} -ge ${TIMEOUT} ]; then
+                              echo "Timeout after ${TIMEOUT}s"
+                              exit 1
+                            fi
+                            if [ -z "${EXTERNAL_IP}" ] || [ "${EXTERNAL_IP}" = "<none>" ] || [ "${EXTERNAL_IP}" = "<pending>" ]; then
+                              echo "Waiting... (${ELAPSED}s)"
+                              sleep 10
+                            fi
+                          done
+                          ENDPOINT="http://${EXTERNAL_IP}"
+                          echo "Endpoint: ${ENDPOINT}"
+
+                          # Smoke test: the home page and the API must both return 200
+                          for path in / /api/info; do
+                            CODE=""
+                            for i in $(seq 1 18); do
+                              CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "${ENDPOINT}${path}")
+                              [ "${CODE}" = "200" ] && break
+                              echo "GET ${path} -> ${CODE}, retrying..."
+                              sleep 10
+                            done
+                            echo "GET ${path} -> ${CODE}"
+                            if [ "${CODE}" != "200" ]; then
+                              echo "Smoke test failed for ${path}"
+                              exit 1
+                            fi
+                          done
+                          API_RESPONSE=$(curl -s --max-time 5 "${ENDPOINT}/api/info")
+                          echo "API response: ${API_RESPONSE}"
+
+                          SMOKE_TEST_RESULTS=$(cat <<EOF
+                          h1. 💨 <+env.name> Smoke Test Report
+                          *Application URL:* [${ENDPOINT}/|${ENDPOINT}/]
+                          *Artifact:* <+artifact.image>
+
+                          ||Check||Result||
+                          |GET /|200 OK|
+                          |GET /api/info|200 OK|
+
+                          h3. API Response
+                          {code}
+                          ${API_RESPONSE}
+                          {code}
+                          ----
+                          _Generated by Harness Pipeline_
+                          EOF
+                          )
+                          echo "$SMOKE_TEST_RESULTS"
+
+                          export EXTERNAL_IP
+                          export SMOKE_TEST_RESULTS
+                    environmentVariables: []
+                    outputVariables:
+                      - name: EXTERNAL_IP
+                        type: String
+                        value: EXTERNAL_IP
+                      - name: SMOKE_TEST_RESULTS
+                        type: String
+                        value: SMOKE_TEST_RESULTS
+                    delegateSelectors:
+                      - se-sandbox-org-delegate
+                  timeout: 10m
+              - step:
+                  type: JiraUpdate
+                  name: Jira Upload SIT Smoke Test
+                  identifier: Jira_Upload_Smoke_Test
+                  spec:
+                    connectorRef: account.Harness_JIRA
+                    issueKey: <+pipeline.stages.audit.spec.execution.steps.Create_Jira_Ticket.issue.key>
+                    transitionTo:
+                      transitionName: ""
+                      status: Done
+                    fields:
+                      - name: Comment
+                        value: <+execution.steps.Smoke_Test.output.outputVariables.SMOKE_TEST_RESULTS>
+                    issueType: Task
+                    projectKey: HD
+                  timeout: 10m
+            rollbackSteps:
+              - step:
+                  name: Rolling Rollback
+                  identifier: rollingRollback
+                  type: K8sRollingRollback
+                  timeout: 10m
+                  spec: {}
         tags: {}
         failureStrategies:
           - onFailure:
@@ -1096,7 +852,7 @@ pipeline:
       type: String
       description: ""
       required: true
-      value: <+input>.default(consumer-tech-reference-architecture)
+      value: <+input>.default(simplii-reference-architecture)
     - name: branch
       type: String
       description: ""
@@ -1106,7 +862,7 @@ pipeline:
       type: String
       description: Docker image name
       required: true
-      value: <+input>.default(alexsotoharness/consumer-tech-spring-boot-sample)
+      value: <+input>.default(alexsotoharness/simplii-spring-boot-sample)
     - name: image_tag
       type: String
       description: Docker image tag
@@ -1116,7 +872,7 @@ pipeline:
       type: String
       description: ""
       required: true
-      value: <+input>.default(alexsoto-harness/consumer-tech-reference-architecture)
+      value: <+input>.default(alexsoto-harness/simplii-reference-architecture)
   properties:
     ci:
       codebase:

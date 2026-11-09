@@ -1,0 +1,13 @@
+infrastructureDefinition:
+  name: Simplii UAT
+  identifier: Simplii_UAT
+  orgIdentifier: sandbox
+  projectIdentifier: soto_sandbox
+  environmentRef: CIBC_UAT
+  deploymentType: Kubernetes
+  type: KubernetesDirect
+  spec:
+    connectorRef: org.se_sandbox_k8s
+    namespace: simplii-uat
+    releaseName: release-<+INFRA_KEY_SHORT_ID>
+  allowSimultaneousDeployments: false

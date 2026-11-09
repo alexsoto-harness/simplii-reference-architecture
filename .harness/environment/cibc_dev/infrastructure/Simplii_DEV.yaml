@@ -1,13 +1,13 @@
 infrastructureDefinition:
-  name: UAT Consumer Tech
-  identifier: UAT_Consumer_Tech
+  name: Simplii DEV
+  identifier: Simplii_DEV
   orgIdentifier: sandbox
   projectIdentifier: soto_sandbox
-  environmentRef: UAT_Wells_Fargo
+  environmentRef: CIBC_DEV
   deploymentType: Kubernetes
   type: KubernetesDirect
   spec:
     connectorRef: org.se_sandbox_k8s
-    namespace: consumer-tech-uat
+    namespace: simplii-dev
     releaseName: release-<+INFRA_KEY_SHORT_ID>
   allowSimultaneousDeployments: false

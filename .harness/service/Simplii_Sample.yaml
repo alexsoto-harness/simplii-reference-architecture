@@ -1,6 +1,6 @@
 service:
-  name: Consumer Tech Sample
-  identifier: Consumer_Tech_Sample
+  name: Simplii Sample
+  identifier: Simplii_Sample
   orgIdentifier: sandbox
   projectIdentifier: soto_sandbox
   serviceDefinition:
@@ -18,7 +18,7 @@ service:
                   paths:
                     - k8s/deployment.yaml
                     - k8s/service.yaml
-                  repoName: consumer-tech-reference-architecture
+                  repoName: simplii-reference-architecture
                   branch: main
               valuesPaths:
                 - k8s/values.yaml

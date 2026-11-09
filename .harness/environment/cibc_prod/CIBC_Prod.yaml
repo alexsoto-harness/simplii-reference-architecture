@@ -1,6 +1,6 @@
 environment:
-  name: PROD Wells Fargo
-  identifier: PROD_Wells_Fargo
+  name: CIBC Prod
+  identifier: CIBC_Prod
   orgIdentifier: sandbox
   projectIdentifier: soto_sandbox
   type: Production
