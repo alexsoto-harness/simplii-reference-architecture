@@ -1,9 +1,10 @@
 {
   "bomFormat" : "CycloneDX",
   "specVersion" : "1.4",
-  "serialNumber" : "urn:uuid:d661da9a-8963-3044-85d2-49814f4dc533",
+  "serialNumber" : "urn:uuid:39222326-cbb8-306f-bdfe-1f735b4faaf9",
   "version" : 1,
   "metadata" : {
+    "timestamp" : "2026-11-09T14:58:15Z",
     "tools" : [
       {
         "vendor" : "OWASP Foundation",
@@ -79,10 +80,6 @@
       {
         "name" : "maven.scopes",
         "value" : "compile,provided,runtime,system"
-      },
-      {
-        "name" : "cdx:reproducible",
-        "value" : "enabled"
       }
     ]
   },

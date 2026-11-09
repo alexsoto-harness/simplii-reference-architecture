@@ -6,35 +6,35 @@
       "tool": {
         "driver": {
           "name": "Snyk Container",
-          "semanticVersion": "1.1308.3",
-          "version": "1.1308.3",
+          "semanticVersion": "1.1308.4",
+          "version": "1.1308.4",
           "informationUri": "https://docs.snyk.io/",
           "properties": {
             "artifactsScanned": 77
           },
           "rules": [
             {
-              "id": "SNYK-ALPINE324-BROTLI-21483816",
+              "id": "SNYK-ALPINE324-ZLIB-22265522",
               "shortDescription": {
-                "text": "Critical severity - CVE-2026-111497 vulnerability in brotli"
+                "text": "Low severity - CVE-2026-4738 vulnerability in zlib"
               },
               "fullDescription": {
-                "text": "(CVE-2026-111497) brotli/brotli-libs@1.2.0-r1"
+                "text": "(CVE-2026-4738) zlib/zlib@1.3.2-r1"
               },
               "help": {
                 "text": "",
-                "markdown": "## NVD Description\n**_Note:_** _Versions mentioned in the description apply only to the upstream `brotli` package and not the `brotli` package as distributed by `Alpine`._\n_See `How to fix?` for `Alpine:3.24` relevant fixed versions and status._\n\nA buffer overflow vulnerability in the Brotli decoder (c/dec/decode.c) in Google Brotli versions 1.0.3 through 1.2.0 on all platforms allows a remote unauthenticated attacker to corrupt adjacent decoder state memory, disclose sensitive memory contents, cause a denial of service, or potentially execute arbitrary code using a crafted Brotli-compressed stream.\n\n\n\n\n\nUsers need to update any Brotli libraries or binaries between 1.0.3 through 1.2.0 to the latest available version: 1.0.10 or 1.1.1 or 1.2.1.\n## Remediation\nUpgrade `Alpine:3.24` `brotli` to version 1.2.1-r0 or higher.\n## References\n- [https://github.com/andybalholm/brotli/releases/tag/v1.2.7](https://github.com/andybalholm/brotli/releases/tag/v1.2.7)\n- [https://nodejs.org/en/blog/vulnerability/october-2026-security-releases#nodejs-brotli-decoder-out-of-bounds-write-permits-remote-code-execution-cve-2026-111497---high](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases#nodejs-brotli-decoder-out-of-bounds-write-permits-remote-code-execution-cve-2026-111497---high)\n- [http://www.openwall.com/lists/oss-security/2026/10/23/25](http://www.openwall.com/lists/oss-security/2026/10/23/25)\n- [http://www.openwall.com/lists/oss-security/2026/10/24/6](http://www.openwall.com/lists/oss-security/2026/10/24/6)\n- [http://www.openwall.com/lists/oss-security/2026/10/26/12](http://www.openwall.com/lists/oss-security/2026/10/26/12)\n- [http://www.openwall.com/lists/oss-security/2026/10/26/13](http://www.openwall.com/lists/oss-security/2026/10/26/13)\n- [http://www.openwall.com/lists/oss-security/2026/10/26/16](http://www.openwall.com/lists/oss-security/2026/10/26/16)\n- [https://broccoli2shell.com](https://broccoli2shell.com)\n- [https://github.com/advisories/GHSA-9v8h-qqgm-4m35](https://github.com/advisories/GHSA-9v8h-qqgm-4m35)\n- [https://github.com/dotnet/announcements/issues/494](https://github.com/dotnet/announcements/issues/494)\n- [https://github.com/google/brotli/releases/tag/v1.0.10](https://github.com/google/brotli/releases/tag/v1.0.10)\n- [https://github.com/google/brotli/releases/tag/v1.1.1](https://github.com/google/brotli/releases/tag/v1.1.1)\n- [https://github.com/google/brotli/releases/tag/v1.2.1](https://github.com/google/brotli/releases/tag/v1.2.1)\n- [https://lists.debian.org/debian-lts-announce/2026/10/msg00049.html](https://lists.debian.org/debian-lts-announce/2026/10/msg00049.html)\n- [https://patchtheplanet.org/brotli](https://patchtheplanet.org/brotli)\n- [https://www.aikido.dev/blog/node2shell-nodejs-brotli-rce-cve-2026-111497](https://www.aikido.dev/blog/node2shell-nodejs-brotli-rce-cve-2026-111497)\n- [https://ellio.tech/en/blog/node2shell-cve-2026-111497-rce-on-stock-nodejs-builds/](https://ellio.tech/en/blog/node2shell-cve-2026-111497-rce-on-stock-nodejs-builds/)\n- [https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-111497](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-111497)\n- [https://github.com/assetnote/node2shell-scanner](https://github.com/assetnote/node2shell-scanner)\n- [https://github.com/projectdiscovery/nuclei-templates/blob/main/http/javascript/cves/2026/CVE-2026-111497.yaml](https://github.com/projectdiscovery/nuclei-templates/blob/main/http/javascript/cves/2026/CVE-2026-111497.yaml)\n- [https://www.cisa.gov/known-exploited-vulnerabilities-catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)\n"
+                "markdown": "## NVD Description\n**_Note:_** _Versions mentioned in the description apply only to the upstream `zlib` package and not the `zlib` package as distributed by `Alpine`._\n_See `How to fix?` for `Alpine:3.24` relevant fixed versions and status._\n\nImproper Restriction of Operations within the Bounds of a Memory Buffer vulnerability in OSGeo gdal (frmts/zlib/contrib/infback9 modules). This vulnerability is associated with program files inftree9.C‎.\n\nThis issue affects gdal: before 3.11.0.\n## Remediation\nUpgrade `Alpine:3.24` `zlib` to version 1.4-r0 or higher.\n## References\n- [https://github.com/OSGeo/gdal/pull/12244](https://github.com/OSGeo/gdal/pull/12244)\n"
               },
               "defaultConfiguration": {
-                "level": "error"
+                "level": "warning"
               },
               "properties": {
                 "tags": [
                   "security",
                   "apk"
                 ],
-                "cvssv3_baseScore": 9.8,
-                "security-severity": "9.8"
+                "cvssv3_baseScore": null,
+                "security-severity": "null"
               }
             }
           ]
@@ -42,16 +42,16 @@
       },
       "results": [
         {
-          "ruleId": "SNYK-ALPINE324-BROTLI-21483816",
-          "level": "error",
+          "ruleId": "SNYK-ALPINE324-ZLIB-22265522",
+          "level": "note",
           "message": {
-            "text": "This file introduces a vulnerable brotli package with a critical severity vulnerability."
+            "text": "This file introduces a vulnerable zlib package with a low severity vulnerability."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "docker.io/alexsotoharness/consumer-tech-spring-boot-sample_922f8aa/alexsotoharness/consumer-tech-spring-boot-sample"
+                  "uri": "docker.io/alexsotoharness/simplii-spring-boot-sample_841348d/alexsotoharness/simplii-spring-boot-sample"
                 },
                 "region": {
                   "startLine": 1
@@ -59,7 +59,7 @@
               },
               "logicalLocations": [
                 {
-                  "fullyQualifiedName": "brotli@1.2.0-r1"
+                  "fullyQualifiedName": "zlib@1.3.2-r1"
                 }
               ]
             }
@@ -67,12 +67,12 @@
           "fixes": [
             {
               "description": {
-                "text": "Upgrade to brotli/brotli-libs@1.2.1-r0"
+                "text": "Upgrade to zlib/zlib@1.4-r0"
               },
               "artifactChanges": [
                 {
                   "artifactLocation": {
-                    "uri": "docker.io/alexsotoharness/consumer-tech-spring-boot-sample_922f8aa/alexsotoharness/consumer-tech-spring-boot-sample"
+                    "uri": "docker.io/alexsotoharness/simplii-spring-boot-sample_841348d/alexsotoharness/simplii-spring-boot-sample"
                   },
                   "replacements": [
                     {
@@ -80,7 +80,7 @@
                         "startLine": 1
                       },
                       "insertedContent": {
-                        "text": "brotli/brotli-libs@1.2.1-r0"
+                        "text": "zlib/zlib@1.4-r0"
                       }
                     }
                   ]
@@ -91,15 +91,15 @@
         }
       ],
       "automationDetails": {
-        "id": "Snyk/Container/docker-image|docker.io/alexsotoharness/consumer-tech-spring-boot-sample/0/2026-10-29T12:57:07.199Z"
+        "id": "Snyk/Container/docker-image|docker.io/alexsotoharness/simplii-spring-boot-sample/0/2026-11-09T14:59:07.652Z"
       }
     },
     {
       "tool": {
         "driver": {
           "name": "Snyk Container",
-          "semanticVersion": "1.1308.3",
-          "version": "1.1308.3",
+          "semanticVersion": "1.1308.4",
+          "version": "1.1308.4",
           "informationUri": "https://docs.snyk.io/",
           "properties": {
             "artifactsScanned": 38
@@ -9750,15 +9750,15 @@
         }
       ],
       "automationDetails": {
-        "id": "Snyk/Container/docker.io/alexsotoharness/consumer-tech-spring-boot-sample:922f8aa://1/2026-10-29T12:57:07.200Z"
+        "id": "Snyk/Container/docker.io/alexsotoharness/simplii-spring-boot-sample:841348d://1/2026-11-09T14:59:07.653Z"
       }
     },
     {
       "tool": {
         "driver": {
           "name": "Snyk Container",
-          "semanticVersion": "1.1308.3",
-          "version": "1.1308.3",
+          "semanticVersion": "1.1308.4",
+          "version": "1.1308.4",
           "informationUri": "https://docs.snyk.io/",
           "properties": {
             "artifactsScanned": 0
@@ -9768,7 +9768,7 @@
       },
       "results": [],
       "automationDetails": {
-        "id": "Snyk/Container/docker.io/alexsotoharness/consumer-tech-spring-boot-sample:922f8aa:/opt/java/openjdk/lib/2/2026-10-29T12:57:07.200Z"
+        "id": "Snyk/Container/docker.io/alexsotoharness/simplii-spring-boot-sample:841348d:/opt/java/openjdk/lib/2/2026-11-09T14:59:07.653Z"
       }
     }
   ]
